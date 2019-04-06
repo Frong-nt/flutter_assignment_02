@@ -92,8 +92,16 @@ class DBProvider {
   }
 
   deleteTodo(int id) async {
+    print("delete");
     final db = await database;
     return db.delete("Todo", where: "id = ?", whereArgs: [id]);
+  }
+
+  deleteTodoFromStatus() async {
+    int status = 1;
+    print("deletefromstatus");
+    final db = await database;
+    return db.delete("Todo", where: "status = ?", whereArgs: [status]);
   }
 
   deleteAll() async {

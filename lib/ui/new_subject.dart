@@ -6,8 +6,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 class NewSubjectScreen extends StatelessWidget{
  
   final scaffoldKey = new GlobalKey<ScaffoldState>();
-  final List<TextEditingController> textControl = [new TextEditingController()];
-  final _formKey = GlobalKey<FormState>();
+  final TextEditingController textControl = new TextEditingController();
+  static final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class NewSubjectScreen extends StatelessWidget{
                     decoration: InputDecoration(
                       hintText: "Subject",
                     ),
-                    controller: textControl[0],
+                    controller: textControl,
                     onSaved: (value) => print(value),
                     validator: (value) {
                       if (value.isEmpty) {
@@ -53,7 +53,7 @@ class NewSubjectScreen extends StatelessWidget{
                         ));
                       } else {
 
-                        Todo todo = new Todo(todo: textControl[0].text, status: 1);
+                        Todo todo = new Todo(todo: textControl.text, status: 0);
                         await DBProvider.db.newTodo(todo);
                        
                         Fluttertoast.showToast(msg:"Todo was saved", toastLength:Toast.LENGTH_SHORT);
