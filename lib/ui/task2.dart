@@ -28,16 +28,22 @@ class TaskState extends State<TaskScreen>{
           ],
         ),
         body:isdelete? Center(child: Text("No data found.")) : FutureBuilder<List<Todo>>(
-          future: DBProvider.db.getAllTodo(),
+          future:TaskState.currentIndexTab==0?  DBProvider.db.getAllTaskTodo() : DBProvider.db.getAllCompletTodo(),
           builder: (BuildContext context, AsyncSnapshot<List<Todo>> snapshot){
             if(snapshot.hasData){
               return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index){
+                  print(snapshot.data.length.toString()+ " length");
+                  print(index.toString() +" index");
+                  print(snapshot.data);
+                  print("-----------------");
+                  List<Todo> keep = List<Todo>();
+                  
                   Todo item = snapshot.data[index];
-                  if(TaskState.currentIndexTab==0 && item.done == 0){
+                  
+                  // if(TaskState.currentIndexTab==0 && item.done == 0){
                       isdelete = false;
-                      print(item.toString() +" tab0");
                       return ListTile(
                         title: Text(item.title),
                         trailing: Checkbox(
@@ -49,20 +55,20 @@ class TaskState extends State<TaskScreen>{
                         value: item.done ==0? false:true,
                       ),
                     );
-                    }if(TaskState.currentIndexTab==1 && item.done ==1){
-                      print(item.toString() +" tab1");
-                      return ListTile(
-                        title: Text(item.title),
-                        trailing: Checkbox(
-                          onChanged: (bool value){
-                            setState(() {
-                             DBProvider.db.blockOrUnblock(item);
-                            });
-                          },
-                        value: item.done ==0? false:true,                          
-                        ),
-                      );
-                    }
+                    // }
+                    // else if(TaskState.currentIndexTab==1 && item.done ==1){
+                    //   return ListTile(
+                    //     title: Text(item.title),
+                    //     trailing: Checkbox(
+                    //       onChanged: (bool value){
+                    //         DBProvider.db.blockOrUnblock(item);
+                    //         setState(() {
+                    //         });
+                    //       },
+                    //     value: item.done ==0? false:true,                          
+                    //     ),
+                    //   );
+                    // }else{}
                 },
               );
             }else {
