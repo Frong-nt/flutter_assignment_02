@@ -23,10 +23,10 @@ class DBProvider {
 
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "TodoDB.db");
+    String path = join(documentsDirectory.path, "todo.db");
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
-      await db.execute("CREATE TABLE Todo ("
+      await db.execute("CREATE TABLE todo ("
           "id INTEGER PRIMARY KEY autoincrement,"
           "title VARCHAR(255),"
           "done INTEGER"
@@ -41,7 +41,7 @@ class DBProvider {
     // int id = table.first["id"];
     //insert to the table using the new id
     var raw = await db.rawInsert(
-        "INSERT Into Todo (title,done)"
+        "INSERT Into todo (title,done)"
         " VALUES (?,?)",
         [newTodo.title, newTodo.done]);
     return raw;
@@ -53,28 +53,28 @@ class DBProvider {
         id: todo.id,
         title: todo.title,
         done: (todo.done==0)? 1:0);
-    var res = await db.update("Todo", done.toMap(),
+    var res = await db.update("todo", done.toMap(),
         where: "id = ?", whereArgs: [todo.id]);
     return res;
   }
 
   updateTodo(Todo newTodo) async {
     final db = await database;
-    var res = await db.update("Todo", newTodo.toMap(),
+    var res = await db.update("todo", newTodo.toMap(),
         where: "id = ?", whereArgs: [newTodo.id]);
     return res;
   }
 
   getTodo(int id) async {
     final db = await database;
-    var res = await db.query("Todo", where: "id = ?", whereArgs: [id]);
+    var res = await db.query("todo", where: "id = ?", whereArgs: [id]);
     return res.isNotEmpty ? Todo.fromMap(res.first) : null;
   }
 
    Future<List<Todo>> getAllCompletTodo() async {
     final db = await database;
     // var res = await db.query("Todo", where: "done = ?", whereArgs: [done]);
-    var res = await db.rawQuery("SELECT * FROM Todo WHERE done = 1");
+    var res = await db.rawQuery("SELECT * FROM todo WHERE done = 1");
 
     List<Todo> list =
         res.isNotEmpty ? res.map((c) => Todo.fromMap(c)).toList() : [];
@@ -84,7 +84,7 @@ class DBProvider {
   Future<List<Todo>> getAllTaskTodo() async {
     final db = await database;
     // var res = await db.query("Todo", where: "done = ?", whereArgs: [done]);
-    var res = await db.rawQuery("SELECT * FROM Todo WHERE done = 0");
+    var res = await db.rawQuery("SELECT * FROM todo WHERE done = 0");
 
      List<Todo> list =
         res.isNotEmpty ? res.map((c) => Todo.fromMap(c)).toList() : [];
@@ -96,7 +96,7 @@ class DBProvider {
 
     print("works");
     // var res = await db.rawQuery("SELECT * FROM Todo WHERE done=1");
-    var res = await db.query("Todo", where: "done = ? ", whereArgs: [1]);
+    var res = await db.query("todo", where: "done = ? ", whereArgs: [1]);
 
     List<Todo> list =
         res.isNotEmpty ? res.map((c) => Todo.fromMap(c)).toList() : [];
@@ -106,7 +106,7 @@ class DBProvider {
   Future<List<Todo>> getAllTodo() async {
     final db = await database;
     // var res = await db.query("Todo");
-    var res = await db.rawQuery("SELECT * FROM Todo");
+    var res = await db.rawQuery("SELECT * FROM todo");
 
     List<Todo> list =
         res.isNotEmpty ? res.map((c) => Todo.fromMap(c)).toList() : [];
@@ -116,18 +116,18 @@ class DBProvider {
   deleteTodo(int id) async {
     print("delete");
     final db = await database;
-    return db.delete("Todo", where: "id = ?", whereArgs: [id]);
+    return db.delete("todo", where: "id = ?", whereArgs: [id]);
   }
 
   deleteTodoFromStatus() async {
     int done = 1;
     print("deletefromstatus");
     final db = await database;
-    return db.delete("Todo", where: "done = ?", whereArgs: [done]);
+    return db.delete("todo", where: "done = ?", whereArgs: [done]);
   }
 
   deleteAll() async {
     final db = await database;
-    db.rawDelete("Delete * from Todo");
+    db.rawDelete("Delete * from todo");
   }
 }
