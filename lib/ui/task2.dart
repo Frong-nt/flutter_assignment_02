@@ -11,8 +11,6 @@ class TaskScreen extends StatefulWidget {
 }
 class TaskState extends State<TaskScreen>{
   static int currentIndexTab = 0;
-  static bool isPressDeleteButton;
-  final List<PlaceholderWidget> _children = [new PlaceholderWidget(), new PlaceholderWidget()];
   
   @override
   Widget build(BuildContext context) {
@@ -37,37 +35,40 @@ class TaskState extends State<TaskScreen>{
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index){
                   Todo item = snapshot.data[index];
-                  if(TaskState.currentIndexTab==0 && item.status == 0){
+                  if(TaskState.currentIndexTab==0 && item.done == 0){
+                      print(item.toString() +" tab0");
                       return ListTile(
-                        title: Text(item.todo),
+                        title: Text(item.title),
                         trailing: Checkbox(
                         onChanged: (bool value){
                           setState(() {
                              DBProvider.db.blockOrUnblock(item);
                           });
                         },
-                        value: item.status ==0? false:true,
+                        value: item.done ==0? false:true,
                       ),
                     );
-                    }if(TaskState.currentIndexTab==1 && item.status ==1){
+                    }if(TaskState.currentIndexTab==1 && item.done ==1){
+                      print(item.toString() +" tab1");
                       return ListTile(
-                        title: Text(item.todo),
+                        title: Text(item.title),
                         trailing: Checkbox(
                           onChanged: (bool value){
                             setState(() {
                              DBProvider.db.blockOrUnblock(item);
                             });
                           },
-                        value: item.status ==0? false:true,                          
+                        value: item.done ==0? false:true,                          
                         ),
                       );
                     }
                 },
               );
-            }else{
-              return Center(child: Text("No data found."));
-            }
-          }),
+            }else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
         bottomNavigationBar: BottomNavigationBar(
           onTap: onTabTapped,
           currentIndex: TaskState.currentIndexTab,
@@ -90,17 +91,12 @@ class TaskState extends State<TaskScreen>{
      TaskState.currentIndexTab = index;
    });
  }
- void setIsDeleteStat(bool state){
-   setState(() {
-    TaskState.isPressDeleteButton = state;  
-   });
- }
+
  void appBarOnpress(){
   if(TaskState.currentIndexTab==0)
     Navigator.pushNamed(context, "/new_subject");
   else if(TaskState.currentIndexTab==1){
         setState(() {
-        isPressDeleteButton = true;
         DBProvider.db.deleteTodoFromStatus();
       });
    }

@@ -53,7 +53,7 @@ class NewSubjectScreen extends StatelessWidget{
                         ));
                       } else {
 
-                        Todo todo = new Todo(todo: textControl.text, status: 0);
+                        Todo todo = new Todo(title: textControl.text, done: 0);
                         await DBProvider.db.newTodo(todo);
                        
                         Fluttertoast.showToast(msg:"Todo was saved", toastLength:Toast.LENGTH_SHORT);

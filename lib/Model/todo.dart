@@ -16,31 +16,31 @@ String todoToJson(Todo data) {
 
 class Todo {
     int id;
-    String todo;
-    int status;
+    String title;
+    int done;
 
     Todo({
         this.id,
-        this.todo,
-        this.status,
+        this.title,
+        this.done,
     });
 
     Todo.emyty();
 
     factory Todo.fromMap(Map<String, dynamic> json) => new Todo(
         id: json["id"],
-        todo: json["todo"],
-        status: json["status"],
+        title: json["title"],
+        done: json["done"],
     );
 
     Map<String, dynamic> toMap() => {
         "id": id,
-        "todo": todo,
-        "status": status,
+        "title": title,
+        "done": done,
     };
 
     @override
   String toString() {
-    return todo;
+    return title;
   }
 }

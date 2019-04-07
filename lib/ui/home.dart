@@ -32,7 +32,7 @@ class _HomepageState extends State<Homepage> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index){
                   Todo item = snapshot.data[index];
-                  if(item.status ==0)
+                  if(item.done ==0)
                     _taskList.add(item);
                   else
                   _completedList.add(item);                    
@@ -86,11 +86,11 @@ class _HomepageState extends State<Homepage> {
                     ._taskList
                     .map(
                       (todo) => CheckboxListTile(
-                            title: Text(todo.todo),
-                            value: todo.status==0? false:true,
+                            title: Text(todo.title),
+                            value: todo.done==0? false:true,
                             onChanged: (bool value) {
                               setState(() {
-                                todo.status = value? 1:0;
+                                todo.done = value? 1:0;
                                 DBProvider.db.updateTodo(todo);
                                 this._updateList();
                               });
@@ -108,11 +108,11 @@ class _HomepageState extends State<Homepage> {
                     ._completedList
                     .map(
                       (todo) => CheckboxListTile(
-                            title: Text(todo.todo),
-                            value: todo.status==0? false:true,
+                            title: Text(todo.title),
+                            value: todo.done==0? false:true,
                             onChanged: (bool value) {
                               setState(() {
-                                 todo.status = value? 1:0;
+                                 todo.done = value? 1:0;
                                 DBProvider.db.updateTodo(todo);
                                 this._updateList();
                               });
