@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'ui/task.dart';
 import 'ui/new_subject.dart';
-import 'ui/home.dart';
 import 'ui/task2.dart';
 // import 'ui/task3.dart';
 
@@ -12,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,

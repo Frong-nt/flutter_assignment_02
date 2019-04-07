@@ -72,7 +72,6 @@ class DBProvider {
   }
 
    Future<List<Todo>> getAllCompletTodo() async {
-    final int done = 1;
     final db = await database;
     // var res = await db.query("Todo", where: "done = ?", whereArgs: [done]);
     var res = await db.rawQuery("SELECT * FROM Todo WHERE done = 1");
@@ -83,7 +82,6 @@ class DBProvider {
   }
   
   Future<List<Todo>> getAllTaskTodo() async {
-    final int done = 0;
     final db = await database;
     // var res = await db.query("Todo", where: "done = ?", whereArgs: [done]);
     var res = await db.rawQuery("SELECT * FROM Todo WHERE done = 0");

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../Model/todo.dart';
 import '../DB/db.dart';
-import 'placeholder_widget.dart';
 class TaskScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -11,7 +10,6 @@ class TaskScreen extends StatefulWidget {
 }
 class TaskState extends State<TaskScreen>{
   static int currentIndexTab = 0;
-  bool isdelete = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,23 +25,19 @@ class TaskState extends State<TaskScreen>{
             )
           ],
         ),
-        body:isdelete? Center(child: Text("No data found.")) : FutureBuilder<List<Todo>>(
+        body:FutureBuilder<List<Todo>>(
           future:TaskState.currentIndexTab==0?  DBProvider.db.getAllTaskTodo() : DBProvider.db.getAllCompletTodo(),
           builder: (BuildContext context, AsyncSnapshot<List<Todo>> snapshot){
             if(snapshot.hasData){
+              if (snapshot.data.length == 0) {
+                return Center(
+                  child: Text("No data found.."),
+                );
+              }
               return ListView.builder(
                 itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index){
-                  print(snapshot.data.length.toString()+ " length");
-                  print(index.toString() +" index");
-                  print(snapshot.data);
-                  print("-----------------");
-                  List<Todo> keep = List<Todo>();
-                  
-                  Todo item = snapshot.data[index];
-                  
-                  // if(TaskState.currentIndexTab==0 && item.done == 0){
-                      isdelete = false;
+                itemBuilder: (BuildContext context, int index){       
+                  Todo item = snapshot.data[index];               
                       return ListTile(
                         title: Text(item.title),
                         trailing: Checkbox(
@@ -55,20 +49,6 @@ class TaskState extends State<TaskScreen>{
                         value: item.done ==0? false:true,
                       ),
                     );
-                    // }
-                    // else if(TaskState.currentIndexTab==1 && item.done ==1){
-                    //   return ListTile(
-                    //     title: Text(item.title),
-                    //     trailing: Checkbox(
-                    //       onChanged: (bool value){
-                    //         DBProvider.db.blockOrUnblock(item);
-                    //         setState(() {
-                    //         });
-                    //       },
-                    //     value: item.done ==0? false:true,                          
-                    //     ),
-                    //   );
-                    // }else{}
                 },
               );
             }else {
@@ -94,18 +74,15 @@ class TaskState extends State<TaskScreen>{
   }
 
   void onTabTapped(int index) {
-    if(index==0) isdelete = false;
    setState(() {
      TaskState.currentIndexTab = index;
    });
  }
 
  void appBarOnpress(){
-  if(TaskState.currentIndexTab==0){
-    isdelete = false;    
+  if(TaskState.currentIndexTab==0){   
     Navigator.pushNamed(context, "/new_subject");
   }else if(TaskState.currentIndexTab==1){
-        isdelete = true;
         setState(() {
         DBProvider.db.deleteTodoFromStatus();
       });
