@@ -34,7 +34,10 @@ class TaskState extends State<TaskScreen>{
                   child: Text("No data found.."),
                 );
               }
-              return ListView.builder(
+              return ListView.separated(
+                separatorBuilder: (context, index) => Divider(
+                  color: Colors.black,
+                ),
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index){       
                   Todo item = snapshot.data[index];               
