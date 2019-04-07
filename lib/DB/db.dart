@@ -29,7 +29,7 @@ class DBProvider {
       await db.execute("CREATE TABLE Todo ("
           "id INTEGER PRIMARY KEY autoincrement,"
           "todo VARCHAR(255),"
-          "status BIT"
+          "status INTEGER"
           ")");
     });
   }
@@ -69,6 +69,24 @@ class DBProvider {
     final db = await database;
     var res = await db.query("Todo", where: "id = ?", whereArgs: [id]);
     return res.isNotEmpty ? Todo.fromMap(res.first) : null;
+  }
+
+   Future<List<Todo>> getAllCompletTodo() async {
+    final int status = 1;
+    final db = await database;
+    var res = await db.query("Todo", where: "status = ?", whereArgs: [status]);
+    List<Todo> list =
+        res.isNotEmpty ? res.map((c) => Todo.fromMap(c)).toList() : [];
+    return list;
+  }
+  
+  Future<List<Todo>> getAllTaskTodo() async {
+    final int status = 0;
+    final db = await database;
+    var res = await db.query("Todo", where: "status = ?", whereArgs: [status]);
+     List<Todo> list =
+        res.isNotEmpty ? res.map((c) => Todo.fromMap(c)).toList() : [];
+    return list;
   }
 
   Future<List<Todo>> getStatusTodo() async {

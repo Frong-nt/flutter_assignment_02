@@ -11,12 +11,11 @@ class TaskScreen extends StatefulWidget {
 }
 class TasklkState extends State<TaskScreen>{
   static int currentIndexTab = 0;
-  static bool isPressDeleteButton = false;
+  static bool isPressDeleteButton;
   final List<PlaceholderWidget> _children = [new PlaceholderWidget(), new PlaceholderWidget()];
   
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: AppBar(
           title: Text("Todo"),

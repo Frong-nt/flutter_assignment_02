@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'ui/task.dart';
+// import 'ui/task.dart';
 import 'ui/new_subject.dart';
+import 'ui/home.dart';
+import 'ui/task2.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,6 +18,7 @@ class MyApp extends StatelessWidget {
         initialRoute: "/",
         routes: {
           "/": (context) => TaskScreen(),
+          // "/": (context) => Homepage(),
           "/new_subject":(context) => NewSubjectScreen()
         }
     );

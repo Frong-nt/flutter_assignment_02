@@ -48,7 +48,7 @@ class _PlaceholderWidget extends State<PlaceholderWidget>{
                     }
                 },
               );
-            }else if(widget.isdelete){
+            }else{
               return Center(child: Text("No data found."));
             }
           });
