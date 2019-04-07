@@ -11,7 +11,7 @@ class TaskScreen extends StatefulWidget {
 }
 class TaskState extends State<TaskScreen>{
   static int currentIndexTab = 0;
-  
+  bool isdelete = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +27,7 @@ class TaskState extends State<TaskScreen>{
             )
           ],
         ),
-        body:FutureBuilder<List<Todo>>(
+        body:isdelete? Center(child: Text("No data found.")) : FutureBuilder<List<Todo>>(
           future: DBProvider.db.getAllTodo(),
           builder: (BuildContext context, AsyncSnapshot<List<Todo>> snapshot){
             if(snapshot.hasData){
@@ -36,6 +36,7 @@ class TaskState extends State<TaskScreen>{
                 itemBuilder: (BuildContext context, int index){
                   Todo item = snapshot.data[index];
                   if(TaskState.currentIndexTab==0 && item.done == 0){
+                      isdelete = false;
                       print(item.toString() +" tab0");
                       return ListTile(
                         title: Text(item.title),
@@ -87,15 +88,18 @@ class TaskState extends State<TaskScreen>{
   }
 
   void onTabTapped(int index) {
+    if(index==0) isdelete = false;
    setState(() {
      TaskState.currentIndexTab = index;
    });
  }
 
  void appBarOnpress(){
-  if(TaskState.currentIndexTab==0)
+  if(TaskState.currentIndexTab==0){
+    isdelete = false;    
     Navigator.pushNamed(context, "/new_subject");
-  else if(TaskState.currentIndexTab==1){
+  }else if(TaskState.currentIndexTab==1){
+        isdelete = true;
         setState(() {
         DBProvider.db.deleteTodoFromStatus();
       });
